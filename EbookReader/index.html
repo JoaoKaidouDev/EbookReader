@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leitor de Livros</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" media="screen" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+    <h1>Meu Leitor de Livros</h1>
+    <input type="file" id="seletorArquivo">
+
+    <div id="leitor">
+        <p>Por favor, selecione um livro em formato PDF ou ePub.</p>
+    </div>
+
+    <div id="controles">
+        <button id="btnAnterior" disabled>Anterior</button>
+        <button id="btnProximo" disabled>Próximo</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
+
+    <script src="app.js"></script>
+
+</body>
+</html>
