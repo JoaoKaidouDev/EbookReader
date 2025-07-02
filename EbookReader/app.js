@@ -19,9 +19,9 @@ let paginaAtual = 0;
 seletorArquivoInput.addEventListener('change', handleFileSelect);
 btnAnterior.addEventListener('click', mostrarPaginaAnterior);
 btnProximo.addEventListener('click', mostrarProximaPagina);
-
 import { processarEpub } from "./extensions/epub.js";
 import { processarPDF } from "./extensions/pdf.js";
+
 // --- LÓGICA DO SELETOR DE TEMA ---
 const themeToggle = document.getElementById('theme-toggle');
 
@@ -53,13 +53,13 @@ themeToggle.addEventListener('change', () => {
 async function handleFileSelect(event) {
     const file = event.target.files[0];
     if (!file) { return; }
-    
+
     gerenciarHandlerResize(false);
     leitorDiv.innerHTML = '<p>Carregando e processando o livro...</p>';
     atualizarUIArquivo(file.name);
 
     const leitor = new FileReader();
-    leitor.onload = async function(e) {
+    leitor.onload = async function (e) {
         const conteudo = e.target.result;
         try {
             if (file.name.endsWith('.pdf')) {
@@ -75,7 +75,7 @@ async function handleFileSelect(event) {
             if (paragrafosDoLivro && paragrafosDoLivro.length > 0) {
                 await calcularPaginacao();
                 iniciarLeitura();
-                gerenciarHandlerResize(true); 
+                gerenciarHandlerResize(true);
             } else {
                 mostrarToast("Não foi possível extrair conteúdo do arquivo.", 'error');
                 resetarUI();
@@ -91,11 +91,17 @@ async function handleFileSelect(event) {
 
 async function calcularPaginacao() {
     mapaDasPaginas = [0];
+
     const alturaMaxima = leitorDiv.clientHeight;
+
     leitorDiv.style.visibility = 'hidden';
     leitorDiv.innerHTML = '';
+
     const leitorEstilos = window.getComputedStyle(leitorDiv);
     const pEstilos = window.getComputedStyle(document.querySelector('#leitor p') || document.createElement('p'));
+
+    let alturaAtual = 0;
+    let indiceInicioPagina = 0;
 
     for (let i = 0; i < paragrafosDoLivro.length; i++) {
         const p = document.createElement('p');
@@ -103,21 +109,24 @@ async function calcularPaginacao() {
         p.style.textIndent = pEstilos.textIndent;
         p.style.marginBottom = pEstilos.marginBottom;
         p.style.marginTop = pEstilos.marginTop;
-        
+
         leitorDiv.appendChild(p);
-        if (leitorDiv.scrollHeight > alturaMaxima) {
+
+        const alturaComNovaLinha = leitorDiv.scrollHeight;
+
+        if (alturaComNovaLinha > alturaMaxima) {
+            // Removemos o último parágrafo (que estourou) e marcamos o início da próxima página
+            leitorDiv.removeChild(p);
             mapaDasPaginas.push(i);
             leitorDiv.innerHTML = '';
-            const pClone = p.cloneNode(true);
-            pClone.style.textIndent = pEstilos.textIndent;
-            pClone.style.marginBottom = pEstilos.marginBottom;
-            pClone.style.marginTop = pEstilos.marginTop;
-            leitorDiv.appendChild(pClone);
+            leitorDiv.appendChild(p); // adicionamos esse parágrafo na próxima página
         }
     }
+
     leitorDiv.innerHTML = '';
     leitorDiv.style.visibility = 'visible';
 }
+
 
 function iniciarLeitura() {
     paginaAtual = 0;
@@ -130,7 +139,7 @@ function mostrarPagina(numeroDaPagina) {
     const indiceInicial = mapaDasPaginas[numeroDaPagina];
     const indiceFinal = mapaDasPaginas[numeroDaPagina + 1] || paragrafosDoLivro.length;
     const paragrafosDaPagina = paragrafosDoLivro.slice(indiceInicial, indiceFinal);
-    
+
     paragrafosDaPagina.forEach(paragrafo => {
         const p = document.createElement('p');
         p.textContent = paragrafo;
@@ -198,11 +207,11 @@ document.addEventListener('keydown', (event) => {
     switch (event.key) {
         case 'ArrowRight':
             // Previne o comportamento padrão do navegador (como rolar a página)
-            event.preventDefault(); 
+            event.preventDefault();
             // Simula o clique no botão "Próximo"
             btnProximo.click();
             break;
-            
+
         case 'ArrowLeft':
             // Previne o comportamento padrão do navegador
             event.preventDefault();
