@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +8,31 @@
     <link rel="stylesheet" type="text/css" href="styles.css" media="screen" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+        rel="stylesheet">
 
 </head>
-<body>
 
-    <h1>Meu Leitor de Livros</h1>
-    <input type="file" id="seletorArquivo">
+<body>
+    <header class="intro-header">
+        <h1>UltimateEpubReader</h1>
+        <p>(talvez não funcione bem com pdf)</p>
+        <p>(recomendamos o Annas Archives para baixar ebooks e pub)</p>
+    </header>
+    <div id="container-arquivo">
+        <label for="seletorArquivo" class="label-arquivo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-upload"
+                viewBox="0 0 16 16">
+                <path
+                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                <path
+                    d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z" />
+            </svg>
+            Escolher Arquivo
+        </label>
+        <input type="file" id="seletorArquivo" accept=".pdf, .epub">
+        <div id="info-arquivo" class="hidden"></div>
+    </div>
 
     <div id="leitor">
         <p>Por favor, selecione um livro em formato PDF ou ePub.</p>
@@ -23,11 +42,17 @@
         <button id="btnAnterior" disabled>Anterior</button>
         <button id="btnProximo" disabled>Próximo</button>
     </div>
+    <div class="theme-switcher-container">
+        <label class="theme-switcher" for="theme-toggle">
+            <input type="checkbox" id="theme-toggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <div id="toast-notification"></div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
-
     <script type="module" src="app.js"></script>
-
 </body>
-</html>

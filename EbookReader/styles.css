@@ -1,58 +1,311 @@
-        body {
-            font-family: 'Nunito';
-            line-height: 1.6;
-            background-color: rgb(42, 32, 54);
-            color: aliceblue;
-        }
+/* =================================
+   STYLES.CSS - VERSÃO FINAL COMPLETA
+   ================================= */
 
-        /* Estilos para a área do leitor - VERSÃO COLUNAS */
-        #leitor {
-            /* Definimos uma altura fixa para o container. O texto vai fluir dentro disso. */
-            height: 60vh;
-            /* 60% da altura da tela. Ajuste conforme seu gosto. */
-            max-width: 85%;
-            /* Usar uma largura maior agora faz sentido. */
-            margin: 20px auto;
-            border: 1px solid #ccc;
-            padding: 20px;
+/* --- 1. VARIÁVEIS DE COR (O PAINEL DE CONTROLE) --- */
+:root {
+    --cor-fundo: #1e293b; /* Azul ardósia escuro */
+    --cor-vidro: rgba(51, 65, 85, 0.5);
+    --cor-borda: rgba(148, 163, 184, 0.4);
+    --cor-principal: #e2e8f0; /* O destaque é um cinza muito claro */
+    --cor-hover: #f8fafc;   /* Branco quase puro */
+    --cor-texto: #cbd5e1;    /* Cinza claro (névoa) */
+    --cor-texto-fraco: #94a3b8; /* Cinza médio */
+    --cor-texto-botao-principal: #1e293b; /* Texto escuro para botões claros */
+    --sombra-suave: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
 
-            /* A MÁGICA ACONTECE AQUI */
-            column-width: 100%;
-            /* Cada coluna (página) terá a largura total do container. */
-            column-gap: 40px;
-            /* O espaço entre as "páginas". É o dobro do padding. */
+/* --- 2. ESTILOS GLOBAIS E LAYOUT --- */
+body {
+    font-family: 'Nunito', sans-serif;
+    line-height: 1.6;
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+    transition: background-color 0.4s ease;
+}
 
-            /* Escondemos a barra de rolagem horizontal padrão. */
-            overflow-x: hidden;
+/* --- 3. CABEÇALHO E TÍTULOS --- */
+.intro-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
 
-            /* Adicionamos uma rolagem suave para a transição de página */
-            scroll-behavior: smooth;
-        }
+.intro-header h1 {
+    font-weight: 300;
+    letter-spacing: 2px;
+    color: var(--cor-texto);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(226, 232, 240, 0.1);
+}
 
-        /* Os estilos para os parágrafos agora podem ser mais simples */
-        #leitor p {
-            font-size: 1.1em;
-            line-height: 1.6;
-            text-align: justify;
-            text-indent: 2em;
-            margin-top: 0;
-            margin-bottom: 1em;
-        }
+.intro-header p {
+    margin: 0.25rem 0;
+    color: var(--cor-texto-fraco);
+    font-size: 0.9em;
+}
 
-        #leitor p:first-child {
-            text-indent: 0;
-        }
+/* --- 4. SELETOR DE TEMA (CANTO DA TELA) --- */
+.theme-switcher-container {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    z-index: 1000;
+}
 
-        body h1 {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-        }
+.theme-switcher {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
 
-        body input {
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 20px;
-            background-color: rgb(132, 105, 190);
-        }
+.theme-switcher input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.theme-switcher .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--cor-vidro);
+    border: 1px solid var(--cor-borda);
+    border-radius: 34px;
+    transition: background-color 0.4s;
+}
+
+.theme-switcher .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 3px;
+    bottom: 3px;
+    background-color: var(--cor-principal);
+    border-radius: 50%;
+    transition: .4s;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%231e293b' viewBox='0 0 16 16'%3E%3Cpath d='M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z'/%3E%3C/svg%3E");
+}
+
+.theme-switcher input:checked + .slider:before {
+    transform: translateX(26px);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='%23f59e0b' viewBox='0 0 16 16'%3E%3Cpath d='M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707z'/%3E%3C/svg%3E");
+}
+
+/* --- 5. SELETOR DE ARQUIVO --- */
+#container-arquivo {
+    margin-bottom: 20px;
+}
+
+#seletorArquivo {
+    display: none;
+}
+
+.label-arquivo {
+    background: var(--cor-vidro);
+    border: 1px solid var(--cor-borda);
+    color: var(--cor-texto);
+    padding: 12px 25px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.label-arquivo:hover {
+    background-color: var(--cor-principal);
+    border-color: var(--cor-principal);
+    color: var(--cor-texto-botao-principal);
+}
+
+#info-arquivo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: var(--cor-vidro);
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 1px solid var(--cor-borda);
+    backdrop-filter: blur(10px);
+}
+#info-arquivo.hidden {
+    display: none;
+}
+
+#btn-limpar {
+    background: transparent;
+    border: none;
+    color: var(--cor-hover);
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 0 5px;
+    line-height: 1;
+}
+
+/* --- 6. BOTÕES DE NAVEGAÇÃO --- */
+#controles {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+}
+
+button {
+    background-color: var(--cor-principal);
+    color: var(--cor-texto-botao-principal);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1em;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    box-shadow: var(--sombra-suave);
+}
+
+button:hover:not(:disabled) {
+    background-color: var(--cor-hover);
+    transform: translateY(-2px);
+}
+
+button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+button:disabled {
+    background-color: var(--cor-vidro);
+    color: var(--cor-texto-fraco);
+    cursor: not-allowed;
+    box-shadow: none;
+    border: 1px solid var(--cor-borda);
+}
+
+/* --- 7. LEITOR E ANIMAÇÕES --- */
+#leitor {
+    height: 60vh; 
+    width: 100%;
+    max-width: 900px;
+    margin: 20px auto;
+    background: var(--cor-vidro);
+    border: 1px solid var(--cor-borda);
+    border-radius: 15px;
+    box-shadow: var(--sombra-suave);
+    padding: 30px 40px; 
+    overflow-y: hidden; 
+    box-sizing: border-box;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+#leitor.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#leitor p {
+    font-size: 1.1em;
+    line-height: 1.7;
+    text-align: justify;
+    text-indent: 2em;
+    margin-top: 0;
+    margin-bottom: 1em;
+}
+
+#leitor p:first-child {
+    text-indent: 0;
+}
+
+#leitor::after {
+    content: '';
+    display: block;
+    height: 25px;
+}
+
+/* --- 8. NOTIFICAÇÃO "TOAST" --- */
+#toast-notification {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--cor-vidro);
+    color: var(--cor-texto);
+    padding: 15px 30px;
+    border-radius: 10px;
+    border: 1px solid var(--cor-borda);
+    box-shadow: var(--sombra-suave);
+    backdrop-filter: blur(10px);
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.5s;
+    z-index: 2000;
+}
+
+#toast-notification.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+#toast-notification.error {
+    background-color: rgba(220, 38, 38, 0.6);
+    border-color: rgba(239, 68, 68, 0.7);
+    color: white;
+}
+
+/* --- 9. TEMA CLARO --- */
+body.light-theme {
+    --cor-fundo: #f8fafc;
+    --cor-vidro: rgba(255, 255, 255, 0.7);
+    --cor-borda: rgba(100, 116, 139, 0.4);
+    --cor-principal: #334155;
+    --cor-hover: #475569;
+    --cor-texto: #1e293b;
+    --cor-texto-fraco: #64748b;
+    --cor-texto-botao-principal: #f8fafc;
+    --sombra-suave: 0 8px 20px 0 rgba(100, 116, 139, 0.15);
+}
+
+body.light-theme h1,
+body.light-theme .label-arquivo {
+    color: var(--cor-texto);
+    text-shadow: none;
+}
+
+body.light-theme .label-arquivo:hover {
+    color: var(--cor-texto-botao-principal);
+}
+
+body.light-theme .theme-switcher .slider:before {
+    background-color: var(--cor-principal);
+}
+
+body.light-theme input:checked + .slider {
+    background-color: var(--cor-vidro);
+}
+
+body.light-theme input:checked + .slider:before {
+    background-color: var(--cor-hover);
+}
